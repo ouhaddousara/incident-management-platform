@@ -202,6 +202,8 @@ Design principles:
 | `dev` | Integration of everyone's work | Protected. Updated only by reviewed pull requests |
 | `feature/<topic>` | One focused piece of work | Created from `dev`, deleted after merge |
 
+> Branch protection rules are not enforced on private repositories with the free GitHub plan. The rules below are a team convention: never push directly to `main` or `dev`, always open a pull request reviewed by another member.
+
 1. `git switch dev && git pull`
 2. `git switch -c feature/<topic>`
 3. Commit in small, coherent steps.
