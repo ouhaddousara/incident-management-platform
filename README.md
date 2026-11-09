@@ -67,13 +67,14 @@ stateDiagram-v2
   AFFECTE --> EN_COURS : technician starts
   EN_COURS --> RESOLU : technician resolves
   EN_COURS --> NON_RESOLU : technician reports failure (remark required)
+  EN_COURS --> AFFECTE : supervisor reassigns (technician unavailable)
   RESOLU --> CLOTURE : supervisor closes
   NON_RESOLU --> CLOTURE : supervisor closes
   NON_RESOLU --> AFFECTE : supervisor reopens or reassigns
   CLOTURE --> [*]
 ```
 
-A closed incident can no longer be modified. Open question: allow `EN_COURS` to `AFFECTE` so a supervisor can reassign when a technician becomes unavailable.
+A closed incident can no longer be modified. A supervisor can reassign an `EN_COURS` incident when its technician becomes unavailable (RG14).
 
 ## Architecture
 
