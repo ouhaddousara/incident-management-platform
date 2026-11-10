@@ -3,7 +3,7 @@ const { table, cols } = require('../schema');
 const { normalizeRole } = require('./roles');
 
 // Les noms de table/colonnes viennent de schema.js (constantes), jamais de l'utilisateur.
-const SELECT = `SELECT ${cols.id} AS id, ${cols.nom} AS nom, ${cols.email} AS email,
+const SELECT = `SELECT ${cols.id} AS id, ${cols.prenom} || ' ' || ${cols.nom} AS nom, ${cols.email} AS email,
                        ${cols.hash} AS hash, ${cols.role} AS role, ${cols.actif} AS actif
                 FROM ${table}`;
 
