@@ -67,13 +67,14 @@ stateDiagram-v2
   AFFECTE --> EN_COURS : technician starts
   EN_COURS --> RESOLU : technician resolves
   EN_COURS --> NON_RESOLU : technician reports failure (remark required)
+  EN_COURS --> AFFECTE : supervisor reassigns (technician unavailable)
   RESOLU --> CLOTURE : supervisor closes
   NON_RESOLU --> CLOTURE : supervisor closes
   NON_RESOLU --> AFFECTE : supervisor reopens or reassigns
   CLOTURE --> [*]
 ```
 
-A closed incident can no longer be modified. Open question: allow `EN_COURS` to `AFFECTE` so a supervisor can reassign when a technician becomes unavailable.
+A closed incident can no longer be modified. A supervisor can reassign an `EN_COURS` incident when its technician becomes unavailable (RG14).
 
 ## Architecture
 
@@ -94,7 +95,7 @@ PostgreSQL         schema, constraints, triggers, backups
 
 | Layer | Choice |
 |---|---|
-| Database | PostgreSQL 16 |
+| Database | PostgreSQL 18 |
 | Local environment | Docker Compose |
 | Version control | Git and GitHub (`main`, `dev`, pull requests) |
 | Back-end | To be decided (Node.js/Express, Laravel or Spring Boot) |
@@ -201,6 +202,8 @@ Design principles:
 | `main` | Stable, deliverable versions, tagged | Protected. Updated only by pull request from `dev` at milestones |
 | `dev` | Integration of everyone's work | Protected. Updated only by reviewed pull requests |
 | `feature/<topic>` | One focused piece of work | Created from `dev`, deleted after merge |
+
+> Branch protection rules are not enforced on private repositories with the free GitHub plan. The rules below are a team convention: never push directly to `main` or `dev`, always open a pull request reviewed by another member.
 
 1. `git switch dev && git pull`
 2. `git switch -c feature/<topic>`
