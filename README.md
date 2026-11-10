@@ -95,7 +95,7 @@ PostgreSQL         schema, constraints, triggers, backups
 
 | Layer | Choice |
 |---|---|
-| Database | PostgreSQL 16 |
+| Database | PostgreSQL 18 |
 | Local environment | Docker Compose |
 | Version control | Git and GitHub (`main`, `dev`, pull requests) |
 | Back-end | To be decided (Node.js/Express, Laravel or Spring Boot) |
