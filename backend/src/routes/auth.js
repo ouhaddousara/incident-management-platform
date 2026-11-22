@@ -5,6 +5,7 @@ const config = require('../config');
 const asyncHandler = require('../lib/asyncHandler');
 const { findByEmail, publicUser } = require('../lib/users');
 const { HOME } = require('../lib/roles');
+const { cookieOptions } = require('../lib/cookie');
 const { requireAuth } = require('../middleware/auth');
 
 const router = express.Router();
@@ -28,14 +29,6 @@ const registerFailure = (key) => {
   if (!e || Date.now() - e.first > WINDOW_MS) attempts.set(key, { count: 1, first: Date.now() });
   else e.count += 1;
 };
-
-const cookieOptions = () => ({
-  httpOnly: true,
-  sameSite: 'lax',
-  secure: config.cookie.secure,
-  maxAge: config.cookie.maxAgeMs,
-  path: '/',
-});
 
 const withRedirect = (user) => ({ user: publicUser(user), redirection: HOME[user.role] });
 
@@ -70,7 +63,7 @@ router.post('/login', asyncHandler(async (req, res) => {
   }
 
   attempts.delete(key);
-  const token = jwt.sign({ sub: user.id }, config.sessionSecret, { algorithm: 'HS256', expiresIn: Math.floor(config.cookie.maxAgeMs / 1000) });
+  const token = jwt.sign({ sub: String(user.id) }, config.sessionSecret, { algorithm: 'HS256', expiresIn: Math.floor(config.cookie.maxAgeMs / 1000) });
   res.cookie(config.cookie.name, token, cookieOptions());
   res.json(withRedirect(user));
 }));

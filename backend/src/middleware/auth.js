@@ -2,6 +2,9 @@ const jwt = require('jsonwebtoken');
 const config = require('../config');
 const asyncHandler = require('../lib/asyncHandler');
 const { findById, publicUser } = require('../lib/users');
+const { cookieOptions } = require('../lib/cookie');
+
+const clearSession = (res) => res.clearCookie(config.cookie.name, { ...cookieOptions(), maxAge: undefined });
 
 // 401 : pas (ou plus) connecté.
 const requireAuth = asyncHandler(async (req, res, next) => {
@@ -12,14 +15,14 @@ const requireAuth = asyncHandler(async (req, res, next) => {
   try {
     payload = jwt.verify(token, config.sessionSecret, { algorithms: ['HS256'] });
   } catch {
-    res.clearCookie(config.cookie.name);
+    clearSession(res);
     return res.status(401).json({ error: 'SESSION_INVALIDE', message: 'Session expirée, reconnectez-vous.' });
   }
 
   // On relit l'utilisateur à chaque requête : un compte désactivé (RG15) ou un rôle modifié est pris en compte tout de suite.
   const user = await findById(payload.sub);
   if (!user || !user.actif || !user.role) {
-    res.clearCookie(config.cookie.name);
+    clearSession(res);
     return res.status(401).json({ error: 'SESSION_INVALIDE', message: 'Session expirée, reconnectez-vous.' });
   }
   req.user = publicUser(user);

@@ -26,4 +26,13 @@ function normalizeRole(value) {
   return ALIASES[key] || null;
 }
 
-module.exports = { normalizeRole, HOME };
+// Code de rôle dans la base de données (table role) pour chaque rôle de l'API
+const DB_ROLE = {
+  etudiant: 'ETUDIANT',
+  enseignant: 'ENSEIGNANT',
+  technicien: 'TECHNICIEN',
+  superviseur: 'SUPERVISEUR',
+  admin: 'ADMINISTRATEUR',
+};
+
+module.exports = { normalizeRole, HOME, DB_ROLE };

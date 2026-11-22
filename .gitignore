@@ -3,3 +3,5 @@ node_modules/
 *.log
 backups/
 .DS_Store
+uploads/
+.idea/
