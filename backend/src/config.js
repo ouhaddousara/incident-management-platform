@@ -20,7 +20,12 @@ module.exports = {
     name: 'helpdesk_session',
     maxAgeMs: 8 * 60 * 60 * 1000, // 8 heures
     secure: process.env.COOKIE_SECURE === 'true' || env === 'production',
+    // 'lax' si le site et l'API ont la même adresse ; 'none' (avec HTTPS) si elles sont différentes
+    sameSite: (process.env.COOKIE_SAMESITE || 'lax').toLowerCase(),
   },
+  // Connexion à la base hébergée : DB_SSL=true active TLS ; DB_SSL_INSECURE=true accepte un certificat non vérifié
+  dbSsl: process.env.DB_SSL === 'true' ? { rejectUnauthorized: process.env.DB_SSL_INSECURE !== 'true' } : false,
+  uploadDir: process.env.UPLOAD_DIR || require('path').join(__dirname, '..', 'uploads'),
   corsOrigin: process.env.CORS_ORIGIN || 'http://localhost:5173',
   trustProxy: process.env.TRUST_PROXY === '1',
 };
